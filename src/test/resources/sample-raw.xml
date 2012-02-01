@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<fruits>
+  <fruit color="red" id="apple">apple</fruit>
+  <fruit color="green" id="pear">pear</fruit>
+  <fruit color="yellow" type="cavendish" id="banana">banana</fruit>
+</fruits>
