@@ -19,14 +19,12 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 
 import com.erdfelt.maven.xmlfresh.util.BasicAttrComparator;
-import com.erdfelt.maven.xmlfresh.util.WeightedAttrComparator;
 
 public class XmlPrettyWriter implements Closeable
 {
     private Comparator<String> attributeSorter;
     private int level = 0;
     private PrintWriter out;
-    private boolean wroteText = false;
 
     public XmlPrettyWriter(Writer writer)
     {
@@ -81,7 +79,7 @@ public class XmlPrettyWriter implements Closeable
 
     private Map<String, String> getAttrMap(Element elem)
     {
-        Map<String, String> attrmap = new TreeMap<String, String>(WeightedAttrComparator.INSTANCE);
+        Map<String, String> attrmap = new TreeMap<String, String>(attributeSorter);
 
         NamedNodeMap nnm = elem.getAttributes();
         int len = nnm.getLength();
@@ -137,15 +135,17 @@ public class XmlPrettyWriter implements Closeable
         out.println(); // last EOL
     }
 
-    private void writeComment(Comment node)
+    private boolean writeComment(Comment node)
     {
         String rawtext = node.getNodeValue();
         if (StringUtils.isNotBlank(rawtext))
         {
             outNewLine();
             out.printf("<!--%s-->",rawtext);
-            wroteText = true;
+            return true;
         }
+
+        return false;
     }
 
     private void writeElement(Element elem)
@@ -172,14 +172,15 @@ public class XmlPrettyWriter implements Closeable
         int length = nodes.getLength();
         if (length > 0)
         {
+            boolean hasOutput = false;
             out.printf(">");
             level++;
             for (int i = 0; i < length; i++)
             {
-                writeNode(nodes.item(i));
+                hasOutput ^= writeNode(nodes.item(i));
             }
             level--;
-            if (!wroteText)
+            if (hasOutput)
             {
                 outNewLine();
             }
@@ -191,31 +192,32 @@ public class XmlPrettyWriter implements Closeable
         }
     }
 
-    private void writeNode(Node node)
+    private boolean writeNode(Node node)
     {
-        wroteText = false;
         switch (node.getNodeType())
         {
             case Node.ELEMENT_NODE:
                 writeElement((Element)node);
-                break;
+                return true;
             case Node.TEXT_NODE:
-                writeText((Text)node);
-                break;
+                return writeText((Text)node);
             case Node.COMMENT_NODE:
-                writeComment((Comment)node);
-                break;
+                return writeComment((Comment)node);
         }
+
+        return false;
     }
 
-    private void writeText(Text node)
+    private boolean writeText(Text node)
     {
-        String rawtext = node.getNodeValue();
+        String rawtext = node.getNodeValue().trim();
         if (StringUtils.isNotBlank(rawtext))
         {
             outXmlEncoded(rawtext);
-            wroteText = true;
+            return true;
         }
+
+        return false;
     }
 
     private void writeXmlDeclaration(Document doc)

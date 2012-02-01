@@ -3,6 +3,7 @@ package com.erdfelt.maven.xmlfresh;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.Comparator;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -43,18 +44,30 @@ public class XmlFormatter
     public void writePretty(File xmlFile, Document doc) throws IOException
     {
         FileWriter writer = null;
-        XmlPrettyWriter pretty = null;
         try
         {
             System.out.printf("Writing XML: %s%n",xmlFile);
             writer = new FileWriter(xmlFile);
+            writePretty(writer,doc);
+        }
+        finally
+        {
+            IO.close(writer);
+        }
+    }
+
+    public void writePretty(Writer writer, Document doc)
+    {
+        XmlPrettyWriter pretty = null;
+        try
+        {
             pretty = new XmlPrettyWriter(writer);
+            pretty.setAttributeSorter(attributeSorter);
             pretty.write(doc);
         }
         finally
         {
             IO.close(pretty);
-            IO.close(writer);
         }
     }
 }
