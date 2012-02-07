@@ -1,23 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <fruits>
-  <fruit id="apple"
-         color="red">
-    apple
-  </fruit>
-  <fruit id="pear"
-         color="green">
-    pear
-  </fruit>
-  <fruit id="banana"
-         color="yellow"
-         type="cavendish">
-    banana
-  </fruit>
+  <fruit color="red" id="apple">apple</fruit>
+  <fruit color="green" id="pear">pear</fruit>
+  <fruit color="yellow" type="cavendish" id="banana">banana</fruit>
   <fruit>cherry</fruit>
-  <fruit/>
-  <fruit color="clear"/>
+  <fruit></fruit>
+  <fruit color="clear"></fruit>
   <fruit id="pomegranate">
-    <seeds/>
+    <seeds />
   </fruit>
 </fruits>
 

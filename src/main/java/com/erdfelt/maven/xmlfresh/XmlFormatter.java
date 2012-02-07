@@ -23,24 +23,22 @@ public class XmlFormatter
     public XmlFormatter()
     {
         tidy = new Tidy();
-        //        tidy.setXmlOut(true);
-        //        tidy.setXmlPi(true);
-        //        tidy.setXmlSpace(true);
-        //        tidy.setXmlTags(true);
-
         // Properties can be found at http://tidy.sourceforge.net/docs/quickref.html
         Properties props = new Properties();
-        props.setProperty("add-xml-space","false");
-        props.setProperty("add-xml-decl","true");
         props.setProperty("output-xml","true");
         props.setProperty("input-xml","true");
+        props.setProperty("add-xml-space","false");
+        props.setProperty("add-xml-decl","true");
+        props.setProperty("char-encoding","utf8");
+        props.setProperty("output-encoding","utf8");
 
         props.setProperty("wrap","120");
         props.setProperty("indent","true");
         props.setProperty("indent-spaces","2");
 
-        props.setProperty("sort-attributes","true");
-        props.setProperty("hide-end-tags","false");
+        // Not present in jtidy (yet)
+        // props.setProperty("sort-attributes","true");
+        // props.setProperty("hide-end-tags","false");
 
         tidy.setConfigurationFromProps(props);
 
