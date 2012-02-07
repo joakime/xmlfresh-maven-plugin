@@ -30,9 +30,13 @@ public class XmlFormatter
         props.setProperty("add-xml-space","false");
         props.setProperty("add-xml-decl","true");
 
-        props.setProperty("wrap","120");
+        props.setProperty("wrap","80");
         props.setProperty("indent","true");
+        //props.setProperty("indent-attributes", "true");
         props.setProperty("indent-spaces","2");
+        props.setProperty("indent-cdata", "false");
+        props.setProperty("escape-cdata", "false");
+       
 
         // Not present in jtidy (yet)
         // props.setProperty("sort-attributes","true");
