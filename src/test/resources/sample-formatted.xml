@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fruits>
+  <fruit id="apple"
+         color="red">
+    apple
+  </fruit>
+  <fruit id="pear"
+         color="green">
+    pear
+  </fruit>
+  <fruit id="banana"
+         color="yellow"
+         type="cavendish">
+    banana
+  </fruit>
+  <fruit>cherry</fruit>
+  <fruit/>
+  <fruit color="clear"/>
+  <fruit id="pomegranate">
+    <seeds/>
+  </fruit>
+</fruits>
+

@@ -13,8 +13,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
+import com.erdfelt.maven.xmlfresh.io.IO;
 import com.erdfelt.maven.xmlfresh.util.BasicAttrComparator;
-import com.erdfelt.maven.xmlfresh.util.IO;
 
 public class XmlFormatter
 {
@@ -56,7 +56,7 @@ public class XmlFormatter
         }
     }
 
-    public void writePretty(Writer writer, Document doc)
+    public void writePretty(Writer writer, Document doc) throws IOException
     {
         XmlPrettyWriter pretty = null;
         try

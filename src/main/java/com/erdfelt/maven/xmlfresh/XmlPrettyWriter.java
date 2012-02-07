@@ -2,7 +2,6 @@ package com.erdfelt.maven.xmlfresh;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.Comparator;
 import java.util.Map;
@@ -18,25 +17,19 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 
+import com.erdfelt.maven.xmlfresh.io.PendingPrintWriter;
 import com.erdfelt.maven.xmlfresh.util.BasicAttrComparator;
 
 public class XmlPrettyWriter implements Closeable
 {
     private Comparator<String> attributeSorter;
     private int level = 0;
-    private PrintWriter out;
+    private PendingPrintWriter out;
 
     public XmlPrettyWriter(Writer writer)
     {
         attributeSorter = new BasicAttrComparator();
-        if (writer instanceof PrintWriter)
-        {
-            out = (PrintWriter)writer;
-        }
-        else
-        {
-            out = new PrintWriter(writer);
-        }
+        out = new PendingPrintWriter(writer);
     }
 
     @Override
@@ -92,7 +85,7 @@ public class XmlPrettyWriter implements Closeable
         return attrmap;
     }
 
-    private void outNewLine()
+    private void outNewLine() throws IOException
     {
         out.println();
         for (int i = 0; i < level; i++)
@@ -101,7 +94,7 @@ public class XmlPrettyWriter implements Closeable
         }
     }
 
-    private void outXmlEncoded(String rawtext)
+    private void outXmlEncoded(String rawtext) throws IOException
     {
         for (char c : rawtext.toCharArray())
         {
@@ -128,14 +121,14 @@ public class XmlPrettyWriter implements Closeable
         this.attributeSorter = attributeSorter;
     }
 
-    public void write(Document doc)
+    public void write(Document doc) throws IOException
     {
         writeXmlDeclaration(doc);
         writeNode(doc.getDocumentElement());
         out.println(); // last EOL
     }
 
-    private boolean writeComment(Comment node)
+    private boolean writeComment(Comment node) throws IOException
     {
         String rawtext = node.getNodeValue();
         if (StringUtils.isNotBlank(rawtext))
@@ -148,7 +141,7 @@ public class XmlPrettyWriter implements Closeable
         return false;
     }
 
-    private void writeElement(Element elem)
+    private void writeElement(Element elem) throws IOException
     {
         outNewLine();
         out.printf("<%s",elem.getNodeName());
@@ -173,7 +166,7 @@ public class XmlPrettyWriter implements Closeable
         if (length > 0)
         {
             boolean hasOutput = false;
-            out.printf(">");
+            out.pendingWrite(">");
             level++;
             for (int i = 0; i < length; i++)
             {
@@ -183,8 +176,11 @@ public class XmlPrettyWriter implements Closeable
             if (hasOutput)
             {
                 outNewLine();
+                out.printf("</%s>",elem.getNodeName());
+            } else {
+                out.dropPending();
+                out.printf("/>");
             }
-            out.printf("</%s>",elem.getNodeName());
         }
         else
         {
@@ -192,7 +188,7 @@ public class XmlPrettyWriter implements Closeable
         }
     }
 
-    private boolean writeNode(Node node)
+    private boolean writeNode(Node node) throws IOException
     {
         switch (node.getNodeType())
         {
@@ -208,7 +204,7 @@ public class XmlPrettyWriter implements Closeable
         return false;
     }
 
-    private boolean writeText(Text node)
+    private boolean writeText(Text node) throws IOException
     {
         String rawtext = node.getNodeValue().trim();
         if (StringUtils.isNotBlank(rawtext))
@@ -220,7 +216,7 @@ public class XmlPrettyWriter implements Closeable
         return false;
     }
 
-    private void writeXmlDeclaration(Document doc)
+    private void writeXmlDeclaration(Document doc) throws IOException
     {
         String ver = doc.getXmlVersion();
         if (StringUtils.isBlank(ver))

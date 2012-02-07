@@ -11,7 +11,7 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.codehaus.plexus.util.StringUtils;
 import org.w3c.dom.Document;
 
-import com.erdfelt.maven.xmlfresh.util.FileFinder;
+import com.erdfelt.maven.xmlfresh.io.FileFinder;
 import com.erdfelt.maven.xmlfresh.util.WeightedAttrComparator;
 
 /**

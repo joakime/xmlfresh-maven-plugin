@@ -1,4 +1,4 @@
-package com.erdfelt.maven.xmlfresh.util;
+package com.erdfelt.maven.xmlfresh.io;
 
 import static java.util.Arrays.*;
 
