@@ -1,73 +1,103 @@
 package com.erdfelt.maven.xmlfresh;
 
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
-import java.io.Writer;
-import java.util.Comparator;
+import java.io.OutputStream;
+import java.util.Properties;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.maven.plugin.MojoFailureException;
 import org.w3c.dom.Document;
+import org.w3c.tidy.Tidy;
 import org.xml.sax.SAXException;
 
 import com.erdfelt.maven.xmlfresh.io.IO;
-import com.erdfelt.maven.xmlfresh.util.BasicAttrComparator;
 
 public class XmlFormatter
 {
-    private Comparator<String> attributeSorter = new BasicAttrComparator();
+    private Tidy tidy;
 
-    public Comparator<String> getAttributeSorter()
+    public XmlFormatter()
     {
-        return attributeSorter;
+        tidy = new Tidy();
+        //        tidy.setXmlOut(true);
+        //        tidy.setXmlPi(true);
+        //        tidy.setXmlSpace(true);
+        //        tidy.setXmlTags(true);
+
+        // Properties can be found at http://tidy.sourceforge.net/docs/quickref.html
+        Properties props = new Properties();
+        props.setProperty("add-xml-space","false");
+        props.setProperty("add-xml-decl","true");
+        props.setProperty("output-xml","true");
+        props.setProperty("input-xml","true");
+
+        props.setProperty("wrap","120");
+        props.setProperty("indent","true");
+        props.setProperty("indent-spaces","2");
+
+        props.setProperty("sort-attributes","true");
+        props.setProperty("hide-end-tags","false");
+
+        tidy.setConfigurationFromProps(props);
+
+        // Make output quiet
+        tidy.setOnlyErrors(true);
+        tidy.setQuiet(true);
+
+        // TODO configure tidy here
     }
 
     /**
-     * Read xml file using JAXP
+     * Read xml file using JTidy
      */
     public Document read(File xmlFile) throws IOException, ParserConfigurationException, SAXException
     {
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        DocumentBuilder db = dbf.newDocumentBuilder();
-        Document doc = db.parse(xmlFile);
-        return doc;
-    }
-
-    public void setAttributeSorter(Comparator<String> attributeSorter)
-    {
-        this.attributeSorter = attributeSorter;
+        FileReader reader = null;
+        try
+        {
+            reader = new FileReader(xmlFile);
+            return tidy.parseDOM(reader,null);
+        }
+        finally
+        {
+            IO.close(reader);
+        }
     }
 
     public void writePretty(File xmlFile, Document doc) throws IOException
     {
-        FileWriter writer = null;
+        FileOutputStream out = null;
         try
         {
             System.out.printf("Writing XML: %s%n",xmlFile);
-            writer = new FileWriter(xmlFile);
-            writePretty(writer,doc);
+            out = new FileOutputStream(xmlFile,false);
+            writePretty(out,doc);
         }
         finally
         {
-            IO.close(writer);
+            IO.close(out);
         }
     }
 
-    public void writePretty(Writer writer, Document doc) throws IOException
+    public void writePretty(OutputStream out, Document doc) throws IOException
     {
-        XmlPrettyWriter pretty = null;
+        tidy.pprint(doc,out);
+    }
+
+    public void format(File file) throws MojoFailureException
+    {
         try
         {
-            pretty = new XmlPrettyWriter(writer);
-            pretty.setAttributeSorter(attributeSorter);
-            pretty.write(doc);
+            Document doc = read(file);
+            writePretty(file,doc);
         }
-        finally
+        catch (Throwable t)
         {
-            IO.close(pretty);
+            throw new MojoFailureException("Failed to format XML: " + file,t);
         }
     }
 }

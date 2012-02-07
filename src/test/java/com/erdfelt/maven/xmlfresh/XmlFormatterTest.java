@@ -4,9 +4,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.eclipse.jetty.toolchain.test.IO;
 import org.eclipse.jetty.toolchain.test.MavenTestingUtils;
@@ -14,14 +11,14 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.w3c.dom.Document;
 
-import com.erdfelt.maven.xmlfresh.util.WeightedAttrComparator;
-
 public class XmlFormatterTest
 {
     @Test
     public void testFormatSample() throws Exception
     {
-        String formatted = formatXml("sample-raw.xml");
+        XmlFormatter xmlformatter = new XmlFormatter();
+
+        String formatted = formatXml(xmlformatter,"sample-raw.xml");
         System.out.println("## formatted\n" + formatted);
         String expected = loadXml("sample-formatted.xml");
         Assert.assertEquals(expected,formatted);
@@ -47,18 +44,12 @@ public class XmlFormatterTest
         }
     }
 
-    private String formatXml(String filename) throws Exception
+    private String formatXml(XmlFormatter xmlformatter, String filename) throws Exception
     {
         File inputXml = MavenTestingUtils.getTestResourceFile(filename);
-        XmlFormatter formatter = new XmlFormatter();
-        WeightedAttrComparator weightedSorter = new WeightedAttrComparator();
-        List<String> importantNames = new ArrayList<String>();
-        importantNames.add("id");
-        weightedSorter.setImportantNames(importantNames);
-        formatter.setAttributeSorter(weightedSorter);
-        Document doc = formatter.read(inputXml);
-        StringWriter writer = new StringWriter();
-        formatter.writePretty(writer,doc);
-        return writer.toString();
+        Document doc = xmlformatter.read(inputXml);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        xmlformatter.writePretty(out,doc);
+        return out.toString();
     }
 }
