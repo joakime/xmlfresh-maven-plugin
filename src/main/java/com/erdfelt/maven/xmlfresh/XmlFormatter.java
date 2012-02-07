@@ -29,8 +29,6 @@ public class XmlFormatter
         props.setProperty("input-xml","true");
         props.setProperty("add-xml-space","false");
         props.setProperty("add-xml-decl","true");
-        props.setProperty("char-encoding","utf8");
-        props.setProperty("output-encoding","utf8");
 
         props.setProperty("wrap","120");
         props.setProperty("indent","true");
