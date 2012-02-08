@@ -1,4 +1,4 @@
-package com.erdfelt.maven.xmlfresh;
+package net.erdfelt.maven.xmlfresh;
 
 import java.io.File;
 
@@ -6,7 +6,7 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 
-import com.erdfelt.maven.xmlfresh.io.FileFinder;
+import net.erdfelt.maven.xmlfresh.io.FileFinder;
 
 /**
  * Formats the pom.xml and other XML files a known pretty print format that is consistent for source control and

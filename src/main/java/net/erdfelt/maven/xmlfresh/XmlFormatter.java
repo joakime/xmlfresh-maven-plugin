@@ -1,4 +1,4 @@
-package com.erdfelt.maven.xmlfresh;
+package net.erdfelt.maven.xmlfresh;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -14,7 +14,7 @@ import org.w3c.dom.Document;
 import org.w3c.tidy.Tidy;
 import org.xml.sax.SAXException;
 
-import com.erdfelt.maven.xmlfresh.io.IO;
+import net.erdfelt.maven.xmlfresh.io.IO;
 
 public class XmlFormatter
 {

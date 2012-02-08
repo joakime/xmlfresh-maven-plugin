@@ -1,4 +1,4 @@
-package com.erdfelt.maven.xmlfresh.util;
+package net.erdfelt.maven.xmlfresh.util;
 
 import java.text.CollationKey;
 import java.text.Collator;
