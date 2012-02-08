@@ -3,10 +3,11 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>net.erdfelt.maven</groupId>
   <artifactId>xmlfresh-maven-plugin</artifactId>
-  <version>1.0.1-SNAPSHOT</version>
+  <version>1.0.0-SNAPSHOT</version>
   <name>XmlFresh :: Maven Plugin</name>
   <description>Simple XML tidy/cleanup/freshen utility for maven builds</description>
   <packaging>maven-plugin</packaging>
+  <url>https://github.com/joakime/xmlfresh-maven-plugin</url>
   <licenses>
     <license>
       <name>The Apache Software License, Version 2.0</name>
