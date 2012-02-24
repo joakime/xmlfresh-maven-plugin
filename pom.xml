@@ -1,14 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xmlns="http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.erdfelt.maven</groupId>
+  <groupId>net.erdfelt.maven</groupId>
   <artifactId>xmlfresh-maven-plugin</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0.1-SNAPSHOT</version>
   <name>XmlFresh :: Maven Plugin</name>
   <description>Simple XML tidy/cleanup/freshen utility for maven builds</description>
   <packaging>maven-plugin</packaging>
+  <url>https://github.com/joakime/xmlfresh-maven-plugin</url>
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <organization>
+    <name>Erdfelt.net Development</name>
+    <url>http://www.erdfelt.net/</url>
+  </organization>
+  <scm>
+    <connection>scm:git:git@github.com:joakime/xmlfresh-maven-plugin.git</connection>
+    <developerConnection>scm:git:git@github.com:joakime/xmlfresh-maven-plugin.git</developerConnection>
+    <url>git@github.com:joakime/xmlfresh-maven-plugin.git</url>
+  </scm>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
@@ -65,6 +80,88 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>2.1.2</version>
+        <executions>
+          <execution>
+            <id>source-jar</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.7</version>
+        <executions>
+          <execution>
+            <id>javadoc-jar</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>2.1</version>
+        <configuration>
+          <autoVersionSubmodules>true</autoVersionSubmodules>
+          <mavenExecutorId>forked-path</mavenExecutorId>
+          <useReleaseProfile>true</useReleaseProfile>
+          <goals>deploy</goals>
+          <preparationGoals>clean install</preparationGoals>
+          <arguments>-Perdfelt-release</arguments>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
+  <developers>
+    <developer>
+      <id>joakime</id>
+      <name>Joakim Erdfelt</name>
+      <email>joakim@erdfelt.net</email>
+      <timezone>-7</timezone>
+    </developer>
+  </developers>
+  <distributionManagement>
+    <repository>
+      <id>oss.sonatype.org</id>
+      <name>Sonatype OSS Nexus Repository</name>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+    </repository>
+    <snapshotRepository>
+      <id>oss.sonatype.org</id>
+      <name>Sonatype OSS SNAPSHOTS Nexus Repository</name>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+  </distributionManagement>
+  <profiles>
+    <profile>
+      <id>erdfelt-release</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>1.4</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>

@@ -1,4 +1,4 @@
-package com.erdfelt.maven.xmlfresh;
+package net.erdfelt.maven.xmlfresh;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;

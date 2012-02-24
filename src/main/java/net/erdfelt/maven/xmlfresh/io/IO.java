@@ -1,4 +1,4 @@
-package com.erdfelt.maven.xmlfresh.io;
+package net.erdfelt.maven.xmlfresh.io;
 
 import java.io.Closeable;
 import java.io.IOException;
