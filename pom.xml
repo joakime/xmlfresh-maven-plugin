@@ -14,6 +14,9 @@
       <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
       <distribution>repo</distribution>
     </license>
+    <license>
+      <name>JTidy License</name>
+    </license>
   </licenses>
   <organization>
     <name>Erdfelt.net Development</name>
@@ -28,11 +31,11 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
   <dependencies>
-    <dependency>
+    <!-- dependency>
       <groupId>net.sf.jtidy</groupId>
       <artifactId>jtidy</artifactId>
       <version>r938</version>
-    </dependency>
+    </dependency-->
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-plugin-api</artifactId>
