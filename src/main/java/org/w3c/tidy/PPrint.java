@@ -1444,11 +1444,14 @@ public class PPrint
         
         if ( inlined )
         {
-            String nextChar = TidyUtils.getString(node.next.textarray,node.next.start,1);
-            
-            if (!",".equals(nextChar) && !";".equals(nextChar))
+            if (node.next != null)
             {
-                addC(' ', linelen++);
+                String nextChar = TidyUtils.getString(node.next.textarray,node.next.start,1);
+
+                if (nextChar != null && !",".equals(nextChar) && !";".equals(nextChar))
+                {
+                    addC(' ',linelen++);
+                }
             }
         }
 
