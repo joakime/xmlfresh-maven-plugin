@@ -16,7 +16,7 @@ public class XmlFormatterTest
     @Test
     public void testFormatSample() throws Exception
     {
-        XmlFormatter xmlformatter = new XmlFormatter();
+        XmlFormatter xmlformatter = new XmlFormatter(XmlFreshenMojo.getDefaultTidyConfiguration());
 
         String formatted = formatXml(xmlformatter,"sample-raw.xml");
         System.out.println("## formatted\n" + formatted);

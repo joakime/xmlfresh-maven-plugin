@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test>
+  <text>This is a mess of text that <code>needs</code>, some testing to see if it <code>
+  tests out</code> ok.</text>
+</test>

@@ -1,6 +1,8 @@
 package net.erdfelt.maven.xmlfresh;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -32,6 +34,13 @@ public class XmlFreshenMojo extends AbstractMojo
     protected File basedir;
 
     /**
+     * configuration properties for tidy
+     * 
+     * @parameter
+     */
+    protected Map<String,String> tidy;
+    
+    /**
      * The list of file patterns to look for. by default all XML files are selected.
      * 
      * @parameter
@@ -48,14 +57,36 @@ public class XmlFreshenMojo extends AbstractMojo
     
     private XmlFormatter xmlformatter;
 
+    
+    protected static Map<String,String> getDefaultTidyConfiguration()
+    {
+        Map<String,String> defaultTidyConfiguration = new HashMap<String,String>();
+        
+        defaultTidyConfiguration.put("output-xml","true");
+        defaultTidyConfiguration.put("input-xml","true");
+        defaultTidyConfiguration.put("add-xml-space","false");
+        defaultTidyConfiguration.put("add-xml-decl","true");
+        defaultTidyConfiguration.put("wrap","80");
+        defaultTidyConfiguration.put("indent","auto");
+        defaultTidyConfiguration.put("indent-spaces","2");
+        defaultTidyConfiguration.put("indent-cdata","false");
+        defaultTidyConfiguration.put("escape-cdata","false");
+        
+        return defaultTidyConfiguration;
+    }
+    
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException
     {
         boolean useDefaultExcludes = true;
         FileFinder finder = new FileFinder(basedir,includes,excludes,useDefaultExcludes);
 
-        xmlformatter = new XmlFormatter();
-
+        Map<String,String> tidyConfiguration = getDefaultTidyConfiguration();
+        
+        tidyConfiguration.putAll(tidy);
+        
+        xmlformatter = new XmlFormatter(tidyConfiguration);
+        
         for (String filename : finder.getSelectedFiles())
         {
             File file = new File(filename);

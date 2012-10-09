@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -20,24 +21,20 @@ public class XmlFormatter
 {
     private Tidy tidy;
 
-    public XmlFormatter()
+    public XmlFormatter(Map<String, String> tidyConfiguration)
     {
         tidy = new Tidy();
+                
         // Properties can be found at http://tidy.sourceforge.net/docs/quickref.html
         Properties props = new Properties();
-        props.setProperty("output-xml","true");
-        props.setProperty("input-xml","true");
-        props.setProperty("add-xml-space","false");
-        props.setProperty("add-xml-decl","true");
-
-        props.setProperty("wrap","80");
-        props.setProperty("indent","true");
-        //props.setProperty("indent-attributes", "true");
-        props.setProperty("indent-spaces","2");
-        props.setProperty("indent-cdata", "false");
-        props.setProperty("escape-cdata", "false");
+        
+        for ( String key : tidyConfiguration.keySet() )
+        {
+            props.setProperty(key, tidyConfiguration.get(key));
+        }
+     
+        //props.setProperty("new-inline-tags", "code, filename, seeds, fruit");
        
-
         // Not present in jtidy (yet)
         // props.setProperty("sort-attributes","true");
         // props.setProperty("hide-end-tags","false");
@@ -48,7 +45,6 @@ public class XmlFormatter
         tidy.setOnlyErrors(true);
         tidy.setQuiet(true);
 
-        // TODO configure tidy here
     }
 
     /**
