@@ -1448,7 +1448,7 @@ public class PPrint
             {
                 String nextChar = TidyUtils.getString(node.next.textarray,node.next.start,1);
 
-                if (nextChar != null && !",".equals(nextChar) && !";".equals(nextChar))
+                if (nextChar != null && !",".equals(nextChar) && !";".equals(nextChar) && !".".equals(nextChar))
                 {
                     addC(' ',linelen++);
                 }
