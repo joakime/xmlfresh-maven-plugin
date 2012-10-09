@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>net.erdfelt.maven</groupId>
   <artifactId>xmlfresh-maven-plugin</artifactId>
-  <version>2.0</version>
+  <version>2.1-SNAPSHOT</version>
   <name>XmlFresh :: Maven Plugin</name>
   <description>Simple XML tidy/cleanup/freshen utility for maven builds</description>
   <packaging>maven-plugin</packaging>
