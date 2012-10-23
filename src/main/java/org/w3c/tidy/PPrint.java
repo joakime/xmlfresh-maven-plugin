@@ -1446,9 +1446,10 @@ public class PPrint
         {
             if (node.next != null)
             {
+                String skipChars = ",;:'.)]}>!?\"";
                 String nextChar = TidyUtils.getString(node.next.textarray,node.next.start,1);
-
-                if (nextChar != null && !",".equals(nextChar) && !";".equals(nextChar) && !".".equals(nextChar))
+                
+                if (nextChar != null && !skipChars.contains(nextChar))
                 {
                     addC(' ',linelen++);
                 }
