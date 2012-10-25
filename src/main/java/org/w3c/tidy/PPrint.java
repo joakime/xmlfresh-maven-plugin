@@ -1395,7 +1395,23 @@ public class PPrint
         }
         else
         {
-            condFlushLine(fout, indent);
+         // check if it is an inline tag and add a space afterwards if it is
+            List<String> l = configuration.tt.findAllDefinedTag(Dict.TAGTYPE_INLINE);
+            boolean inlined = false;
+            for ( String tag : l )
+            {
+                if (p.equals(tag))
+                {
+                    inlined = true;
+                    break;
+                }
+            }
+            
+            if ( !inlined )
+            {
+            
+                condFlushLine(fout, indent);
+            }
         }
 
     }
@@ -1446,7 +1462,7 @@ public class PPrint
         {
             if (node.next != null)
             {
-                String skipChars = ",;:'.)]}>!?\"";
+                String skipChars = ",;:'.)]}>!?";
                 String nextChar = TidyUtils.getString(node.next.textarray,node.next.start,1);
                 
                 if (nextChar != null && !skipChars.contains(nextChar))
@@ -2409,6 +2425,9 @@ public class PPrint
             return;
         }
 
+        // check if it is an inline tag and add a space afterwards if it is
+        List<String> inlineTags = tt.findAllDefinedTag(Dict.TAGTYPE_INLINE);
+        
         if (node.type == Node.TEXT_NODE || (node.type == Node.CDATA_TAG && lexer.configuration.escapeCdata))
         {
             printText(fout, mode, indent, node.textarray, node.start, node.end);
@@ -2464,7 +2483,22 @@ public class PPrint
             || node.type == Node.START_END_TAG
             && !configuration.xHTML)
         {
-            condFlushLine(fout, indent);
+            // check if it is an inline tag and avoid the newline
+            boolean inlined = false;
+            for ( String tag : inlineTags )
+            {
+                if (node.element.equals(tag))
+                {
+                    inlined = true;
+                    break;
+                }
+            } 
+            
+            if ( !inlined )
+            {             
+                condFlushLine(fout, indent);
+            }
+            
             printTag(lexer, fout, mode, indent, node);
             // fgiust: Remove empty lines between tags in XML.
             // flushLine(fout, indent);
@@ -2491,9 +2525,8 @@ public class PPrint
 
 
             // check if it is an inline tag and add a space afterwards if it is
-            List<String> l = tt.findAllDefinedTag(Dict.TAGTYPE_INLINE);
             boolean inlined = false;
-            for ( String tag : l )
+            for ( String tag : inlineTags )
             {
                 if (node.element.equals(tag))
                 {
