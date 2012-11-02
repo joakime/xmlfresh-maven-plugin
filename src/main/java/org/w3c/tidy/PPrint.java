@@ -1407,11 +1407,24 @@ public class PPrint
                 }
             }
             
-            if ( !inlined )
+            if (inlined)
             {
-            
+                if (node.next != null)
+                {
+                    String skipChars = ",;:'.)]}>!?";
+                    String nextChar = TidyUtils.getString(node.next.textarray,node.next.start,1);
+                    
+                    if (nextChar != null && !skipChars.contains(nextChar))
+                    {
+                        addC(' ',linelen++);
+                    }
+                }
+            }
+            else
+            {
                 condFlushLine(fout, indent);
             }
+         
         }
 
     }
